@@ -5,9 +5,11 @@
  * @param payload The data to post as JSON.
  * @returns A promise that resolves if the request was successful.
  */
-export const executeWebhook = async (webhookUrl: string, payload: unknown): Promise<void> => {
+export const executeWebhook = async (webhookPath: string, payload: unknown): Promise<void> => {
   try {
-    const response = await fetch(webhookUrl, {
+    const baseUrl = import.meta.env.VITE_N8N_BASE_URL || ''
+    const fullUrl = `${baseUrl}${webhookPath}`
+    const response = await fetch(fullUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -35,9 +37,11 @@ export const executeWebhook = async (webhookUrl: string, payload: unknown): Prom
  * @param url The full URL to the endpoint.
  * @returns A promise that resolves to the fetched JSON data.
  */
-export const fetchGet = async <T = unknown>(url: string): Promise<T> => {
+export const fetchGet = async <T = unknown>(path: string): Promise<T> => {
   try {
-    const response = await fetch(url, {
+    const baseUrl = import.meta.env.VITE_N8N_BASE_URL || ''
+    const fullUrl = `${baseUrl}${path}`
+    const response = await fetch(fullUrl, {
       method: 'GET',
       headers: {
         Accept: 'application/json',

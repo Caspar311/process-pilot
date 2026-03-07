@@ -9,7 +9,7 @@
             "label": "Angebot auswählen",
             "instruction": "Wähle das zu prüfende PDF aus deinem Nextcloud-Ordner aus.",
             "action_type": "fetch_list",
-            "source": "n8n_nextcloud_list_webhook",
+            "source": "/webhook/186b8e97-cd6b-44e6-b7d6-aa8ba41f9d94",
             "ui_element": "file_picker"
         },
         {
@@ -34,7 +34,7 @@
             "text_snippet": "Hallo,\nanbei erhalten Sie das gewünschte Angebot als PDF im Anhang.\n\nBeste Grüße",
             "action_button": {
                 "label": "An Zammad übertragen",
-                "webhook": "n8n_zammad_upload_webhook"
+                "webhook": "/webhook/9790bb88-d366-484b-b9f0-c78c86cda241"
             },
             "ui_element": "action_panel"
         }
