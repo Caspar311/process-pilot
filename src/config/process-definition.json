@@ -1,1 +1,42 @@
-{}
+{
+    "process_id": "angebot_versand_v1",
+    "version": "1.0.0",
+    "title": "Angebotsprüfung & Zammad-Versand",
+    "description": "Workflow zum finalen Review von PDF-Angeboten und Versand an Kunden via Zammad.",
+    "steps": [
+        {
+            "id": "step_1_select",
+            "label": "Angebot auswählen",
+            "instruction": "Wähle das zu prüfende PDF aus deinem Nextcloud-Ordner aus.",
+            "action_type": "fetch_list",
+            "source": "n8n_nextcloud_list_webhook",
+            "ui_element": "file_picker"
+        },
+        {
+            "id": "step_2_review",
+            "label": "Gegenlesen & Korrektur",
+            "instruction": "Öffne das PDF und prüfe Summen, Leistungszeitraum und Empfängerdaten.",
+            "external_link": {
+                "label": "PDF in Nextcloud öffnen",
+                "url_template": "https://nextcloud.de/index.php/f/{{file_id}}"
+            },
+            "checklist": [
+                "Rechnungsadresse korrekt?",
+                "Skonto-Regelung enthalten?",
+                "Ansprechpartner geprüft?"
+            ],
+            "ui_element": "checklist_view"
+        },
+        {
+            "id": "step_3_zammad",
+            "label": "In Zammad bereitstellen",
+            "instruction": "Kopiere den Textbaustein und sende das PDF an das Ticket.",
+            "text_snippet": "Hallo,\nanbei erhalten Sie das gewünschte Angebot als PDF im Anhang.\n\nBeste Grüße",
+            "action_button": {
+                "label": "An Zammad übertragen",
+                "webhook": "n8n_zammad_upload_webhook"
+            },
+            "ui_element": "action_panel"
+        }
+    ]
+}
