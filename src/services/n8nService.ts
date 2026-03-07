@@ -7,6 +7,7 @@
  */
 export const executeWebhook = async (webhookPath: string, payload: unknown): Promise<void> => {
   try {
+    // Falls VITE_N8N_BASE_URL nicht gesetzt ist, nutzt fetch() den relativen Pfad über den Vite-Proxy
     const baseUrl = import.meta.env.VITE_N8N_BASE_URL || ''
     const fullUrl = `${baseUrl}${webhookPath}`
     const response = await fetch(fullUrl, {
