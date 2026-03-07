@@ -77,14 +77,29 @@ const FilePickerStep: React.FC<{
       try {
         const result = await fetchGet(step.source!)
         if (isMounted) {
-          // Assume the webhook returns an array of objects with id and name
-          const items = Array.isArray(result) ? result : []
+          // Robust mapping: handle both arrays and objects
+          let items: any[] = []
+
+          if (Array.isArray(result)) {
+            items = result
+          } else if (result && typeof result === 'object') {
+            // If n8n returns a single object containing an array (e.g. { data: [...] })
+            const possibleArray = Object.values(result).find(val => Array.isArray(val))
+            if (possibleArray) {
+              items = possibleArray as any[]
+            } else {
+              // Fallback: treat the object itself as a single item
+              items = [result]
+            }
+          }
+
           setOptions(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            items.map((item: any) => ({
-              id: item.id || item.file_id || String(Math.random()),
-              name: item.name || item.filename || 'Unknown File',
-            }))
+            items.map((item: any) => {
+              // Try common ID and Name fields, fallback to stringified object if nothing matches
+              const id = item.id || item.fileId || item.file_id || String(Math.random())
+              const name = item.name || item.filename || item.title || JSON.stringify(item).slice(0, 30)
+              return { id, name }
+            })
           )
         }
       } catch (err) {
@@ -252,8 +267,8 @@ export const ProcessViewer: React.FC = () => {
                               confirmedChecks: e.target.checked
                                 ? [...(processPayload[step.id]?.confirmedChecks || []), item]
                                 : (processPayload[step.id]?.confirmedChecks || []).filter(
-                                    (i: string) => i !== item
-                                  ),
+                                  (i: string) => i !== item
+                                ),
                             })
                           }
                         />
