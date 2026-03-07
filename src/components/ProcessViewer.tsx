@@ -78,26 +78,30 @@ const FilePickerStep: React.FC<{
         const result = await fetchGet(step.source!)
         if (isMounted) {
           // Robust mapping: handle both arrays and objects
-          let items: any[] = []
+          let items: Record<string, unknown>[] = []
 
           if (Array.isArray(result)) {
-            items = result
+            items = result as Record<string, unknown>[]
           } else if (result && typeof result === 'object') {
             // If n8n returns a single object containing an array (e.g. { data: [...] })
-            const possibleArray = Object.values(result).find(val => Array.isArray(val))
+            const possibleArray = Object.values(result as Record<string, unknown>).find((val) =>
+              Array.isArray(val)
+            )
             if (possibleArray) {
-              items = possibleArray as any[]
+              items = possibleArray as Record<string, unknown>[]
             } else {
               // Fallback: treat the object itself as a single item
-              items = [result]
+              items = [result as Record<string, unknown>]
             }
           }
 
           setOptions(
-            items.map((item: any) => {
+            items.map((item) => {
               // Try common ID and Name fields, fallback to stringified object if nothing matches
-              const id = item.id || item.fileId || item.file_id || String(Math.random())
-              const name = item.name || item.filename || item.title || JSON.stringify(item).slice(0, 30)
+              const id = String(item.id || item.fileId || item.file_id || Math.random())
+              const name = String(
+                item.name || item.filename || item.title || JSON.stringify(item).slice(0, 30)
+              )
               return { id, name }
             })
           )
@@ -267,8 +271,8 @@ export const ProcessViewer: React.FC = () => {
                               confirmedChecks: e.target.checked
                                 ? [...(processPayload[step.id]?.confirmedChecks || []), item]
                                 : (processPayload[step.id]?.confirmedChecks || []).filter(
-                                  (i: string) => i !== item
-                                ),
+                                    (i: string) => i !== item
+                                  ),
                             })
                           }
                         />
