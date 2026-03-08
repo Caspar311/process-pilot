@@ -12,6 +12,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: true,
       },
+      '/webhook-test': {
+        target: 'https://n8n.triphaus.online',
+        changeOrigin: true,
+        secure: true,
+      },
     },
   },
 })

@@ -98,9 +98,15 @@ const FilePickerStep: React.FC<{
           setOptions(
             items.map((item, index) => {
               // Try common ID and Name fields, fallback to stringified object if nothing matches
-              const id = String(item.id || item.fileId || item.file_id || `fallback_${index}`)
+              const id = String(
+                item.id || item.eTag || item.fileId || item.file_id || `fallback_${index}`
+              )
               const name = String(
-                item.name || item.filename || item.title || JSON.stringify(item).slice(0, 30)
+                item.name ||
+                  item.path ||
+                  item.filename ||
+                  item.title ||
+                  JSON.stringify(item).slice(0, 30)
               )
               return { id, name }
             })
