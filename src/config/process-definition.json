@@ -9,7 +9,7 @@
             "label": "Angebot auswählen",
             "instruction": "Wähle das zu prüfende PDF aus deinem Nextcloud-Ordner aus.",
             "action_type": "fetch_list",
-            "source": "/webhook-test/186b8e97-cd6b-44e6-b7d6-aa8ba41f9d94",
+            "source": "/webhook/186b8e97-cd6b-44e6-b7d6-aa8ba41f9d94",
             "ui_element": "file_picker"
         },
         {
