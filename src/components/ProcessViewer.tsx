@@ -96,9 +96,9 @@ const FilePickerStep: React.FC<{
           }
 
           setOptions(
-            items.map((item) => {
+            items.map((item, index) => {
               // Try common ID and Name fields, fallback to stringified object if nothing matches
-              const id = String(item.id || item.fileId || item.file_id || Math.random())
+              const id = String(item.id || item.fileId || item.file_id || `fallback_${index}`)
               const name = String(
                 item.name || item.filename || item.title || JSON.stringify(item).slice(0, 30)
               )
@@ -135,7 +135,11 @@ const FilePickerStep: React.FC<{
           <InputLabel id={`select-label-${step.id}`}>Datei auswählen</InputLabel>
           <Select
             labelId={`select-label-${step.id}`}
-            value={selectedFileId || ''}
+            value={
+              selectedFileId && options.some((opt) => opt.id === selectedFileId)
+                ? selectedFileId
+                : ''
+            }
             onChange={(e) => {
               const selectedId = e.target.value as string
               const selectedOption = options.find((o) => o.id === selectedId)
