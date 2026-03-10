@@ -243,12 +243,31 @@ export const ProcessViewer: React.FC = () => {
         )
       case 'checklist_view': {
         const checkedItems = processPayload[step.id]?.checkedItems || {}
+
+        // Resolve url_template variables like {{file_id}} and {{file_name}}
+        let resolvedUrl = step.external_link?.url_template || '#'
+        if (resolvedUrl.includes('{{file_id}}') || resolvedUrl.includes('{{file_name}}')) {
+          let fileId = ''
+          let fileName = ''
+          for (const sData of Object.values(processPayload)) {
+            if (sData?.selectedFileId) {
+              fileId = sData.selectedFileId
+              fileName = sData.fileName || ''
+              break
+            }
+          }
+          resolvedUrl = resolvedUrl.replace('{{file_id}}', encodeURIComponent(fileId))
+          resolvedUrl = resolvedUrl.replace('{{file_name}}', encodeURIComponent(fileName))
+        }
+
         return (
           <Box sx={{ mt: 2 }}>
             {step.external_link && (
               <Box sx={{ mb: 2 }}>
                 <Link
-                  href="#"
+                  href={resolvedUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   underline="hover"
                   sx={{ display: 'inline-flex', alignItems: 'center', fontWeight: 'medium' }}
                 >

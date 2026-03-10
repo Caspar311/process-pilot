@@ -18,7 +18,7 @@
             "instruction": "Öffne das PDF und prüfe Summen, Leistungszeitraum und Empfängerdaten.",
             "external_link": {
                 "label": "PDF in Nextcloud öffnen",
-                "url_template": "https://nextcloud.retzki.net/apps/files/?dir=/Angebote/{{file_id}}"
+                "url_template": "https://nextcloud.retzki.net/apps/files/?dir=/Angebote&openfile={{file_id}}"
             },
             "checklist": [
                 "Rechnungsadresse korrekt?",
